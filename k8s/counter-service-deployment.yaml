@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: counter-service-deployment
+  labels:
+    app: counter-service
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: counter-service
+  template:
+    metadata:
+      labels:
+        app: counter-service
+    spec:
+      containers:
+        - name: counter-service
+          image: argamanza/counter-service:latest
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: "/app/data"
+              name: counter-service-data
+      volumes:
+        - name: counter-service-data
+          persistentVolumeClaim:
+            claimName: counter-service-pvc
